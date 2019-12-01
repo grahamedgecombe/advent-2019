@@ -12,4 +12,11 @@ public final class Day1Test {
 		assertEquals(654, Day1.requiredFuelPart1(1969));
 		assertEquals(33583, Day1.requiredFuelPart1(100756));
 	}
+
+	@Test
+	public void testPart2() {
+		assertEquals(2, Day1.requiredFuelPart2(14));
+		assertEquals(966, Day1.requiredFuelPart2(1969));
+		assertEquals(50346, Day1.requiredFuelPart2(100756));
+	}
 }
