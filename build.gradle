@@ -1,10 +1,14 @@
 plugins {
-    id 'java'
+    id 'application'
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+application {
+    mainClassName = 'com.grahamedgecombe.advent2019.Advent'
 }
 
 repositories {
@@ -14,6 +18,7 @@ repositories {
 dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter:5.5.2')
     implementation('com.google.guava:guava:28.1-jre')
+    implementation('io.github.classgraph:classgraph:4.8.58')
 }
 
 test {

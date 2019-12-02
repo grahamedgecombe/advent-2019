@@ -1,35 +1,41 @@
 package com.grahamedgecombe.advent2019;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class Day2 {
-	public static void main(String[] args) throws IOException {
-		var program = Arrays.stream(AdventUtils.readString("day2.txt").split(","))
+public final class Day2 extends Day<List<Integer>> {
+	public Day2() {
+		super(2);
+	}
+
+	@Override
+	public List<Integer> parse(List<String> lines) {
+		return Arrays.stream(lines.get(0).split(","))
 			.map(Integer::parseInt)
 			.collect(Collectors.toList());
+	}
 
-		var machine = new IntcodeMachine(program);
+	@Override
+	public Object solvePart1(List<Integer> input) {
+		var machine = new IntcodeMachine(input);
 		machine.poke(1, 12);
 		machine.poke(2, 2);
 		machine.evaluate();
-		System.out.println(machine.peek(0));
-
-		System.out.println(solve(program, 19690720));
+		return machine.peek(0);
 	}
 
-	public static int solve(List<Integer> program, int desiredOutput) {
+	@Override
+	public Object solvePart2(List<Integer> input) {
 		for (int noun = 0; noun < 100; noun++) {
 			for (int verb = 0; verb < 100; verb++) {
-				var machine = new IntcodeMachine(program);
+				var machine = new IntcodeMachine(input);
 				machine.poke(1, noun);
 				machine.poke(2, verb);
 				machine.evaluate();
 
 				int output = machine.peek(0);
-				if (output == desiredOutput) {
+				if (output == 19690720) {
 					return noun * 100 + verb;
 				}
 			}

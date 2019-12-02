@@ -1,8 +1,10 @@
 package com.grahamedgecombe.advent2019;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -22,9 +24,19 @@ public final class Day2Test {
 
 	@ParameterizedTest
 	@MethodSource("createStates")
-	public void testPart1(List<Integer> initialState, List<Integer> finalState) {
+	public void testIntcodeMachine(List<Integer> initialState, List<Integer> finalState) {
 		var machine = new IntcodeMachine(initialState);
 		machine.evaluate();
 		assertEquals(finalState, machine.getMemory());
+	}
+
+	@Test
+	public void testPart1() throws IOException {
+		assertEquals(4138687, Advent.solvePart1(new Day2()));
+	}
+
+	@Test
+	public void testPart2() throws IOException {
+		assertEquals(6635, Advent.solvePart2(new Day2()));
 	}
 }

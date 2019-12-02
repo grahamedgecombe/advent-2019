@@ -1,23 +1,32 @@
 package com.grahamedgecombe.advent2019;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public final class Day1 {
-	public static void main(String[] args) throws IOException {
-		var modules = AdventUtils.readLines("day1.txt").stream()
+public final class Day1 extends Day<List<Integer>> {
+	public Day1() {
+		super(1);
+	}
+
+	@Override
+	public List<Integer> parse(List<String> lines) {
+		return lines.stream()
 			.map(Integer::parseInt)
 			.collect(Collectors.toList());
+	}
 
-		var sumPart1 = modules.stream()
+	@Override
+	public Object solvePart1(List<Integer> input) {
+		return input.stream()
 			.mapToInt(Day1::requiredFuelPart1)
 			.sum();
-		System.out.println(sumPart1);
+	}
 
-		var sumPart2 = modules.stream()
+	@Override
+	public Object solvePart2(List<Integer> input) {
+		return input.stream()
 			.mapToInt(Day1::requiredFuelPart2)
 			.sum();
-		System.out.println(sumPart2);
 	}
 
 	public static int requiredFuelPart1(int mass) {
