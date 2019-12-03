@@ -1,12 +1,11 @@
 package com.grahamedgecombe.advent2019.day3;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.grahamedgecombe.advent2019.Position;
 
 public final class Grid {
@@ -20,7 +19,7 @@ public final class Grid {
 		return grid;
 	}
 
-	private final Multimap<Position, Wire> wires = HashMultimap.create();
+	private final Map<Position, Cell> cells = new HashMap<>();
 
 	private Grid() {
 		/* empty */
@@ -28,6 +27,7 @@ public final class Grid {
 
 	private void trace(Wire wire) {
 		var position = Position.ORIGIN;
+		int delay = 0;
 
 		for (var step : wire.getSteps()) {
 			var direction = step.getDirection();
@@ -35,16 +35,25 @@ public final class Grid {
 
 			for (int i = 0; i < step.getCount(); i++) {
 				position = position.add(dx, dy);
-				wires.put(position, wire);
+
+				var cell = cells.computeIfAbsent(position, p -> new Cell());
+				cell.trace(wire, ++delay);
 			}
 		}
 	}
 
 	public OptionalInt getDistanceToClosestIntersection() {
-		return wires.asMap().entrySet().stream()
-			.filter(e -> e.getValue().size() == 2)
+		return cells.entrySet().stream()
+			.filter(e -> e.getValue().isIntersection())
 			.map(Map.Entry::getKey)
 			.mapToInt(Position.ORIGIN::getManhattanDistance)
+			.min();
+	}
+
+	public OptionalInt getSmallestDelayIntersection() {
+		return cells.values().stream()
+			.filter(Cell::isIntersection)
+			.mapToInt(Cell::getSignalDelay)
 			.min();
 	}
 }
