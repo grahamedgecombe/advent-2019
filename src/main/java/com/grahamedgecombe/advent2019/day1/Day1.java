@@ -1,7 +1,9 @@
-package com.grahamedgecombe.advent2019;
+package com.grahamedgecombe.advent2019.day1;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.grahamedgecombe.advent2019.Day;
 
 public final class Day1 extends Day<List<Integer>> {
 	public Day1() {

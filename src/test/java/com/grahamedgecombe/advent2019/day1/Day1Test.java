@@ -1,7 +1,9 @@
-package com.grahamedgecombe.advent2019;
+package com.grahamedgecombe.advent2019.day1;
 
 import java.io.IOException;
 
+import com.grahamedgecombe.advent2019.Advent;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,7 +16,7 @@ public final class Day1Test {
 		assertEquals(654, Day1.requiredFuelPart1(1969));
 		assertEquals(33583, Day1.requiredFuelPart1(100756));
 
-		assertEquals(3311492, Advent.solvePart1(new Day1()));
+		Assertions.assertEquals(3311492, Advent.solvePart1(new Day1()));
 	}
 
 	@Test

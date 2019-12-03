@@ -1,8 +1,11 @@
-package com.grahamedgecombe.advent2019;
+package com.grahamedgecombe.advent2019.day2;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.grahamedgecombe.advent2019.Day;
+import com.grahamedgecombe.advent2019.IntcodeMachine;
 
 public final class Day2 extends Day<List<Integer>> {
 	public Day2() {

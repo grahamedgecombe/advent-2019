@@ -1,9 +1,12 @@
-package com.grahamedgecombe.advent2019;
+package com.grahamedgecombe.advent2019.day2;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.grahamedgecombe.advent2019.Advent;
+import com.grahamedgecombe.advent2019.IntcodeMachine;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -32,7 +35,7 @@ public final class Day2Test {
 
 	@Test
 	public void testPart1() throws IOException {
-		assertEquals(4138687, Advent.solvePart1(new Day2()));
+		Assertions.assertEquals(4138687, Advent.solvePart1(new Day2()));
 	}
 
 	@Test
