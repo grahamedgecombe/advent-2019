@@ -1,10 +1,9 @@
 package com.grahamedgecombe.advent2019.day2;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.grahamedgecombe.advent2019.Day;
+import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 
 public final class Day2 extends Day<List<Integer>> {
@@ -14,14 +13,12 @@ public final class Day2 extends Day<List<Integer>> {
 
 	@Override
 	public List<Integer> parse(List<String> lines) {
-		return Arrays.stream(lines.get(0).split(","))
-			.map(Integer::parseInt)
-			.collect(Collectors.toList());
+		return IntcodeMachine.parseProgram(lines.get(0));
 	}
 
 	@Override
 	public Object solvePart1(List<Integer> input) {
-		var machine = new IntcodeMachine(input);
+		var machine = new IntcodeMachine(input, IntcodeIo.UNSUPPORTED);
 		machine.poke(1, 12);
 		machine.poke(2, 2);
 		machine.evaluate();
@@ -32,7 +29,7 @@ public final class Day2 extends Day<List<Integer>> {
 	public Object solvePart2(List<Integer> input) {
 		for (int noun = 0; noun < 100; noun++) {
 			for (int verb = 0; verb < 100; verb++) {
-				var machine = new IntcodeMachine(input);
+				var machine = new IntcodeMachine(input, IntcodeIo.UNSUPPORTED);
 				machine.poke(1, noun);
 				machine.poke(2, verb);
 				machine.evaluate();

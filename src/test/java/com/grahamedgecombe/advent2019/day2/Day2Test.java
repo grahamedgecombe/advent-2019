@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.grahamedgecombe.advent2019.Advent;
+import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public final class Day2Test {
 	@ParameterizedTest
 	@MethodSource("createStates")
 	public void testIntcodeMachine(List<Integer> initialState, List<Integer> finalState) {
-		var machine = new IntcodeMachine(initialState);
+		var machine = new IntcodeMachine(initialState, IntcodeIo.UNSUPPORTED);
 		machine.evaluate();
 		assertEquals(finalState, machine.getMemory());
 	}
