@@ -86,6 +86,24 @@ public final class IntcodeMachine {
 		case OUTPUT:
 			io.write(readParameter(parameters[0]));
 			break;
+		case JUMP_IF_TRUE:
+			if (readParameter(parameters[0]) != 0) {
+				pc = readParameter(parameters[1]);
+			}
+			break;
+		case JUMP_IF_FALSE:
+			if (readParameter(parameters[0]) == 0) {
+				pc = readParameter(parameters[1]);
+			}
+			break;
+		case LESS_THAN:
+			result = readParameter(parameters[0]) < readParameter(parameters[1]) ? 1 : 0;
+			writeParameter(parameters[2], result);
+			break;
+		case EQUALS:
+			result = readParameter(parameters[0]) == readParameter(parameters[1]) ? 1 : 0;
+			writeParameter(parameters[2], result);
+			break;
 		case FINISH:
 			return false;
 		}

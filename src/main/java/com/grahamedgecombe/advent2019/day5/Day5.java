@@ -17,7 +17,15 @@ public final class Day5 extends Day<List<Integer>> {
 
 	@Override
 	public Object solvePart1(List<Integer> input) {
-		var io = new DiagnosticIo();
+		var io = new DiagnosticIo(1);
+		var machine = new IntcodeMachine(input, io);
+		machine.evaluate();
+		return io.getDiagnosticCode();
+	}
+
+	@Override
+	public Object solvePart2(List<Integer> input) {
+		var io = new DiagnosticIo(5);
 		var machine = new IntcodeMachine(input, io);
 		machine.evaluate();
 		return io.getDiagnosticCode();
