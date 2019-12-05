@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.grahamedgecombe.advent2019.Day;
-import com.grahamedgecombe.advent2019.IntcodeMachine;
+import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 
 public final class Day2 extends Day<List<Integer>> {
 	public Day2() {

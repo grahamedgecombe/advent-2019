@@ -1,4 +1,4 @@
-package com.grahamedgecombe.advent2019;
+package com.grahamedgecombe.advent2019.intcode;
 
 import java.util.ArrayList;
 import java.util.List;

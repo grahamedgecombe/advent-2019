@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.grahamedgecombe.advent2019.Advent;
-import com.grahamedgecombe.advent2019.IntcodeMachine;
+import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
