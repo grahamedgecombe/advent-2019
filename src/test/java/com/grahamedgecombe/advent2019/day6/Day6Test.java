@@ -27,4 +27,25 @@ public final class Day6Test {
 
 		assertEquals(295936, Advent.solvePart1(new Day6()));
 	}
+
+	@Test
+	public void testPart2() throws IOException {
+		assertEquals(4, Universe.parse(List.of(
+			"COM)B",
+			"B)C",
+			"C)D",
+			"D)E",
+			"E)F",
+			"B)G",
+			"G)H",
+			"D)I",
+			"E)J",
+			"J)K",
+			"K)L",
+			"K)YOU",
+			"I)SAN"
+		)).getTransfers());
+
+		assertEquals(457, Advent.solvePart2(new Day6()));
+	}
 }

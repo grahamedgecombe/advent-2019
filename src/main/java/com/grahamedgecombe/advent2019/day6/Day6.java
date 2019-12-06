@@ -18,4 +18,9 @@ public final class Day6 extends Day<Universe> {
 	public Object solvePart1(Universe input) {
 		return input.getOrbits();
 	}
+
+	@Override
+	public Object solvePart2(Universe input) {
+		return input.getTransfers();
+	}
 }
