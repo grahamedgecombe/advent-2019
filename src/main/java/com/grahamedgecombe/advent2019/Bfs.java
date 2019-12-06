@@ -42,7 +42,7 @@ public final class Bfs {
 			}
 
 			for (T neighbour : current.getNeighbours()) {
-				if (parents.containsKey(neighbour)) {
+				if (parents.containsKey(neighbour) || neighbour.equals(root)) {
 					continue;
 				}
 
