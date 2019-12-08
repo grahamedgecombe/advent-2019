@@ -18,4 +18,9 @@ public final class Day8 extends Day<Image> {
 	public Object solvePart1(Image input) {
 		return input.findFewestZeroDigits();
 	}
+
+	@Override
+	public Object solvePart2(Image input) {
+		return "\n".concat(input.combineLayers().toString());
+	}
 }

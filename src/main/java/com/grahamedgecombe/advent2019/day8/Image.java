@@ -13,6 +13,10 @@ public final class Image {
 		return new Image(width, height, layers);
 	}
 
+	private static int combineColors(int back, int front) {
+		return front == Layer.TRANSPARENT ? back : front;
+	}
+
 	private final int width, height;
 	private final List<Layer> layers;
 
@@ -27,5 +31,21 @@ public final class Image {
 			.min(Comparator.comparing(l -> l.countDigits(0)))
 			.orElseThrow();
 		return layer.countDigits(1) * layer.countDigits(2);
+	}
+
+	public Layer combineLayers() {
+		var pixels = new int[width * height];
+
+		for (int i = 0; i < pixels.length; i++) {
+			var color = layers.get(layers.size() - 1).getPixel(i);
+
+			for (int j = layers.size() - 2; j >= 0; j--) {
+				color = combineColors(color, layers.get(j).getPixel(i));
+			}
+
+			pixels[i] = color;
+		}
+
+		return new Layer(width, height, pixels);
 	}
 }
