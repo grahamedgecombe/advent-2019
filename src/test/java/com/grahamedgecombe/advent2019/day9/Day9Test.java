@@ -43,4 +43,9 @@ public final class Day9Test {
 	public void testPart1() throws IOException {
 		assertEquals(2350741403L, Advent.solvePart1(new Day9()));
 	}
+
+	@Test
+	public void testPart2() throws IOException {
+		assertEquals(53088L, Advent.solvePart2(new Day9()));
+	}
 }

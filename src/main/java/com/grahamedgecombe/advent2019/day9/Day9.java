@@ -23,4 +23,12 @@ public final class Day9 extends Day<List<Long>> {
 		machine.evaluate();
 		return io.getDiagnosticCode();
 	}
+
+	@Override
+	public Object solvePart2(List<Long> input) {
+		var io = new DiagnosticIo(2);
+		var machine = new IntcodeMachine(input, io);
+		machine.evaluate();
+		return io.getDiagnosticCode();
+	}
 }
