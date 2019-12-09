@@ -6,24 +6,24 @@ import java.util.List;
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
 public final class DiagnosticIo implements IntcodeIo {
-	private final List<Integer> outputs = new ArrayList<>();
-	private final int system;
+	private final List<Long> outputs = new ArrayList<>();
+	private final long system;
 
-	public DiagnosticIo(int system) {
+	public DiagnosticIo(long system) {
 		this.system = system;
 	}
 
 	@Override
-	public int read() {
+	public long read() {
 		return system;
 	}
 
 	@Override
-	public void write(int value) {
+	public void write(long value) {
 		outputs.add(value);
 	}
 
-	public int getDiagnosticCode() {
+	public long getDiagnosticCode() {
 		return outputs.get(outputs.size() - 1);
 	}
 }

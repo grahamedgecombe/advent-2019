@@ -9,6 +9,7 @@ public enum Opcode {
 	JUMP_IF_FALSE(6, 2),
 	LESS_THAN(7, 3),
 	EQUALS(8, 3),
+	RELATIVE_BASE_OFFSET(9, 1),
 	FINISH(99, 0);
 
 	public static Opcode fromId(int id) {

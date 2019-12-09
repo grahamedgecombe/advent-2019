@@ -2,7 +2,8 @@ package com.grahamedgecombe.advent2019.intcode;
 
 public enum ParameterMode {
 	POSITION(0),
-	IMMEDIATE(1);
+	IMMEDIATE(1),
+	RELATIVE(2);
 
 	public static ParameterMode fromId(int id) {
 		for (var value : values()) {

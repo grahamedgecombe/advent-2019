@@ -3,16 +3,16 @@ package com.grahamedgecombe.advent2019.intcode;
 public interface IntcodeIo {
 	IntcodeIo UNSUPPORTED = new IntcodeIo() {
 		@Override
-		public int read() {
+		public long read() {
 			throw new UnsupportedOperationException();
 		}
 
 		@Override
-		public void write(int value) {
+		public void write(long value) {
 			throw new UnsupportedOperationException();
 		}
 	};
 
-	int read();
-	void write(int value);
+	long read();
+	void write(long value);
 }

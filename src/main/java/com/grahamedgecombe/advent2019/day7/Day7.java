@@ -9,24 +9,24 @@ import com.google.common.collect.Collections2;
 import com.grahamedgecombe.advent2019.Day;
 import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 
-public final class Day7 extends Day<List<Integer>> {
-	public static int getMaxSignal(List<Integer> program, boolean feedback) {
-		var digits = feedback ? List.of(5, 6, 7, 8, 9) : List.of(0, 1, 2, 3, 4);
+public final class Day7 extends Day<List<Long>> {
+	public static long getMaxSignal(List<Long> program, boolean feedback) {
+		var digits = feedback ? List.of(5L, 6L, 7L, 8L, 9L) : List.of(0L, 1L, 2L, 3L, 4L);
 		return Collections2.permutations(digits).stream()
-			.mapToInt(phases -> getSignal(program, phases, feedback))
+			.mapToLong(phases -> getSignal(program, phases, feedback))
 			.max()
 			.orElseThrow();
 	}
 
-	private static int getSignal(List<Integer> program, List<Integer> phases, boolean feedback) {
-		var queues = new ArrayList<BlockingQueue<Integer>>();
+	private static long getSignal(List<Long> program, List<Long> phases, boolean feedback) {
+		var queues = new ArrayList<BlockingQueue<Long>>();
 		for (int i = 0; i < phases.size() + 1; i++) {
-			var queue = new ArrayBlockingQueue<Integer>(2);
+			var queue = new ArrayBlockingQueue<Long>(2);
 			if (i < phases.size()) {
 				queue.offer(phases.get(i));
 			}
 			if (i == 0) {
-				queue.offer(0);
+				queue.offer(0L);
 			}
 			queues.add(queue);
 		}
@@ -60,17 +60,17 @@ public final class Day7 extends Day<List<Integer>> {
 	}
 
 	@Override
-	public List<Integer> parse(List<String> lines) {
+	public List<Long> parse(List<String> lines) {
 		return IntcodeMachine.parseProgram(lines.get(0));
 	}
 
 	@Override
-	public Object solvePart1(List<Integer> input) {
+	public Object solvePart1(List<Long> input) {
 		return getMaxSignal(input, false);
 	}
 
 	@Override
-	public Object solvePart2(List<Integer> input) {
+	public Object solvePart2(List<Long> input) {
 		return getMaxSignal(input, true);
 	}
 }

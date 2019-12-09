@@ -5,15 +5,15 @@ import java.util.concurrent.BlockingQueue;
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
 public final class AmplifierIo implements IntcodeIo {
-	private final BlockingQueue<Integer> input, output;
+	private final BlockingQueue<Long> input, output;
 
-	public AmplifierIo(BlockingQueue<Integer> input, BlockingQueue<Integer> output) {
+	public AmplifierIo(BlockingQueue<Long> input, BlockingQueue<Long> output) {
 		this.input = input;
 		this.output = output;
 	}
 
 	@Override
-	public int read() {
+	public long read() {
 		try {
 			return input.take();
 		} catch (InterruptedException ex) {
@@ -23,7 +23,7 @@ public final class AmplifierIo implements IntcodeIo {
 	}
 
 	@Override
-	public void write(int value) {
+	public void write(long value) {
 		try {
 			output.put(value);
 		} catch (InterruptedException ex) {

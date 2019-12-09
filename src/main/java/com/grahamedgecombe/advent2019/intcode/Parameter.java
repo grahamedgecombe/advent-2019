@@ -2,9 +2,9 @@ package com.grahamedgecombe.advent2019.intcode;
 
 public final class Parameter {
 	private final ParameterMode mode;
-	private final int parameter;
+	private final long parameter;
 
-	public Parameter(ParameterMode mode, int parameter) {
+	public Parameter(ParameterMode mode, long parameter) {
 		this.mode = mode;
 		this.parameter = parameter;
 	}
@@ -13,7 +13,7 @@ public final class Parameter {
 		return mode;
 	}
 
-	public int getParameter() {
+	public long getParameter() {
 		return parameter;
 	}
 }

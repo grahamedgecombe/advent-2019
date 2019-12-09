@@ -5,33 +5,42 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.google.common.base.Preconditions;
-
 public final class IntcodeMachine {
-	public static List<Integer> parseProgram(String line) {
+	public static List<Long> parseProgram(String line) {
 		return Arrays.stream(line.split(","))
-			.map(Integer::parseInt)
+			.map(Long::parseLong)
 			.collect(Collectors.toList());
 	}
 
-	private final List<Integer> memory;
-	private final IntcodeIo io;
-	private int pc = 0;
+	public static List<Long> program(int... ints) {
+		var list = new ArrayList<Long>();
+		for (var i : ints) {
+			list.add((long) i);
+		}
+		return list;
+	}
 
-	public IntcodeMachine(List<Integer> memory, IntcodeIo io) {
+	private final List<Long> memory;
+	private final IntcodeIo io;
+	private long pc = 0, relativeBase = 0;
+
+	public IntcodeMachine(List<Long> memory, IntcodeIo io) {
 		this.memory = new ArrayList<>(memory);
 		this.io = io;
 	}
 
-	public void poke(int addr, int value) {
-		memory.set(addr, value);
+	public void poke(long addr, long value) {
+		while (addr >= memory.size()) {
+			memory.add(0L);
+		}
+		memory.set((int) addr, value);
 	}
 
-	public int peek(int addr) {
-		return memory.get(addr);
+	public long peek(long addr) {
+		return addr < memory.size() ? memory.get((int) addr) : 0;
 	}
 
-	public List<Integer> getMemory() {
+	public List<Long> getMemory() {
 		return memory;
 	}
 
@@ -39,34 +48,44 @@ public final class IntcodeMachine {
 		while (step());
 	}
 
-	private int readParameter(Parameter parameter) {
+	private long readParameter(Parameter parameter) {
 		switch (parameter.getMode()) {
 		case POSITION:
 			return peek(parameter.getParameter());
 		case IMMEDIATE:
 			return parameter.getParameter();
+		case RELATIVE:
+			return peek(relativeBase + parameter.getParameter());
+		default:
+			throw new IllegalArgumentException();
 		}
-
-		throw new IllegalArgumentException();
 	}
 
-	private void writeParameter(Parameter parameter, int value) {
-		Preconditions.checkArgument(parameter.getMode() == ParameterMode.POSITION);
-		poke(parameter.getParameter(), value);
+	private void writeParameter(Parameter parameter, long value) {
+		switch (parameter.getMode()) {
+		case POSITION:
+			poke(parameter.getParameter(), value);
+			break;
+		case RELATIVE:
+			poke(relativeBase + parameter.getParameter(), value);
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public boolean step() {
-		int insn = memory.get(pc++);
+		long insn = peek(pc++);
 
-		var opcode = Opcode.fromId(insn % 100);
+		var opcode = Opcode.fromId((int) (insn % 100));
 		insn /= 100;
 
 		var parameters = new Parameter[opcode.getParameters()];
 		for (var i = 0; i < parameters.length; i++) {
-			var mode = ParameterMode.fromId(insn % 10);
+			var mode = ParameterMode.fromId((int) (insn % 10));
 			insn /= 10;
 
-			var parameter = memory.get(pc++);
+			var parameter = peek(pc++);
 
 			parameters[i] = new Parameter(mode, parameter);
 		}
@@ -103,6 +122,9 @@ public final class IntcodeMachine {
 		case EQUALS:
 			result = readParameter(parameters[0]) == readParameter(parameters[1]) ? 1 : 0;
 			writeParameter(parameters[2], result);
+			break;
+		case RELATIVE_BASE_OFFSET:
+			relativeBase += readParameter(parameters[0]);
 			break;
 		case FINISH:
 			return false;
