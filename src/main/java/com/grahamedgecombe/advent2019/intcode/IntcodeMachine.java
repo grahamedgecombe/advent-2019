@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 
 public final class IntcodeMachine {
-	public static final List<Integer> parseProgram(String line) {
+	public static List<Integer> parseProgram(String line) {
 		return Arrays.stream(line.split(","))
 			.map(Integer::parseInt)
 			.collect(Collectors.toList());
