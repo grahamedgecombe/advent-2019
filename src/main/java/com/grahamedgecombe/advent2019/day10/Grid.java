@@ -1,8 +1,11 @@
 package com.grahamedgecombe.advent2019.day10;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import com.grahamedgecombe.advent2019.Position;
 
 public final class Grid {
 	public static Grid parse(List<String> lines) {
@@ -42,20 +45,23 @@ public final class Grid {
 		return asteroids[y * width + x];
 	}
 
-	public int getVisibleAsteroids(int x, int y) {
-		var angles = new HashSet<Tangent>();
+	public SortedMap<Tangent, SortedMap<Integer, Position>> getAsteroids(int x, int y) {
+		var asteroids = new TreeMap<Tangent, SortedMap<Integer, Position>>();
 
 		for (var otherY = 0; otherY < height; otherY++) {
 			for (var otherX = 0; otherX < width; otherX++) {
 				if (isAsteroid(otherX, otherY) && (x != otherX || y != otherY)) {
-					var opposite = y - otherY;
-					var adjacent = x - otherX;
-					angles.add(new Tangent(opposite, adjacent).normalize());
+					var opposite = otherY - y;
+					var adjacent = otherX - x;
+
+					var angle = new Tangent(opposite, adjacent).normalize();
+					var squaredDistance = opposite * opposite + adjacent * adjacent;
+					asteroids.computeIfAbsent(angle, a -> new TreeMap<>()).put(squaredDistance, new Position(otherX, otherY));
 				}
 			}
 		}
 
-		return angles.size();
+		return asteroids;
 	}
 
 	public Optional<Station> getStation() {
@@ -64,7 +70,7 @@ public final class Grid {
 		for (var y = 0; y < height; y++) {
 			for (var x = 0; x < width; x++) {
 				if (isAsteroid(x, y)) {
-					var visibleAsteroids = getVisibleAsteroids(x, y);
+					var visibleAsteroids = getAsteroids(x, y).keySet().size();
 					if (station == null || visibleAsteroids > station.getVisibleAsteroids()) {
 						station = new Station(x, y, visibleAsteroids);
 					}
@@ -77,5 +83,29 @@ public final class Grid {
 
 	public int getMaxVisibleAsteroids() {
 		return getStation().orElseThrow().getVisibleAsteroids();
+	}
+
+	public Optional<Position> vaporizeAsteroids() {
+		var station = getStation().orElseThrow();
+		var asteroids = getAsteroids(station.getX(), station.getY());
+
+		var n = 0;
+		while (!asteroids.isEmpty()) {
+			for (var it = asteroids.entrySet().iterator(); it.hasNext(); ) {
+				var entry = it.next();
+				var ray = entry.getValue();
+
+				var position = ray.remove(ray.firstKey());
+				if (++n == 200) {
+					return Optional.of(position);
+				}
+
+				if (ray.isEmpty()) {
+					it.remove();
+				}
+			}
+		}
+
+		return Optional.empty();
 	}
 }
