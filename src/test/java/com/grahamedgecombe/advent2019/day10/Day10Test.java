@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day10;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.grahamedgecombe.advent2019.Advent;
 import org.junit.jupiter.api.Test;
@@ -11,15 +12,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public final class Day10Test {
 	@Test
 	public void testPart1() throws IOException {
-		assertEquals(8, Grid.parse(List.of(
+		assertEquals(Optional.of(new Station(3, 4, 8)), Grid.parse(List.of(
 			".#..#",
 			".....",
 			"#####",
 			"....#",
 			"...##"
-		)).getMaxVisibleAsteroids());
+		)).getStation());
 
-		assertEquals(33, Grid.parse(List.of(
+		assertEquals(Optional.of(new Station(5, 8, 33)), Grid.parse(List.of(
 			"......#.#.",
 			"#..#.#....",
 			"..#######.",
@@ -30,9 +31,9 @@ public final class Day10Test {
 			".##.#..###",
 			"##...#..#.",
 			".#....####"
-		)).getMaxVisibleAsteroids());
+		)).getStation());
 
-		assertEquals(35, Grid.parse(List.of(
+		assertEquals(Optional.of(new Station(1, 2, 35)), Grid.parse(List.of(
 			"#.#...#.#.",
 			".###....#.",
 			".#....#...",
@@ -43,9 +44,9 @@ public final class Day10Test {
 			"..##....##",
 			"......#...",
 			".####.###."
-		)).getMaxVisibleAsteroids());
+		)).getStation());
 
-		assertEquals(41, Grid.parse(List.of(
+		assertEquals(Optional.of(new Station(6, 3, 41)), Grid.parse(List.of(
 			".#..#..###",
 			"####.###.#",
 			"....###.#.",
@@ -56,9 +57,9 @@ public final class Day10Test {
 			"#..#.#.###",
 			".##...##.#",
 			".....#.#.."
-		)).getMaxVisibleAsteroids());
+		)).getStation());
 
-		assertEquals(210, Grid.parse(List.of(
+		assertEquals(Optional.of(new Station(11, 13, 210)), Grid.parse(List.of(
 			".#..##.###...#######",
 			"##.############..##.",
 			".#.######.########.#",
@@ -79,7 +80,7 @@ public final class Day10Test {
 			".#.#.###########.###",
 			"#.#.#.#####.####.###",
 			"###.##.####.##.#..##"
-		)).getMaxVisibleAsteroids());
+		)).getStation());
 
 		assertEquals(214, Advent.solvePart1(new Day10()));
 	}

@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day10;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 public final class Grid {
 	public static Grid parse(List<String> lines) {
@@ -57,18 +58,24 @@ public final class Grid {
 		return angles.size();
 	}
 
-	public int getMaxVisibleAsteroids() {
-		var max = Integer.MIN_VALUE;
+	public Optional<Station> getStation() {
+		Station station = null;
 
 		for (var y = 0; y < height; y++) {
 			for (var x = 0; x < width; x++) {
 				if (isAsteroid(x, y)) {
 					var visibleAsteroids = getVisibleAsteroids(x, y);
-					max = Math.max(max, visibleAsteroids);
+					if (station == null || visibleAsteroids > station.getVisibleAsteroids()) {
+						station = new Station(x, y, visibleAsteroids);
+					}
 				}
 			}
 		}
 
-		return max;
+		return Optional.ofNullable(station);
+	}
+
+	public int getMaxVisibleAsteroids() {
+		return getStation().orElseThrow().getVisibleAsteroids();
 	}
 }
