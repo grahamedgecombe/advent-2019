@@ -1,12 +1,12 @@
-package com.grahamedgecombe.advent2019.day3;
+package com.grahamedgecombe.advent2019;
 
 public enum Direction {
 	LEFT('L', -1, 0),
-	RIGHT('R', 1, 0),
 	UP('U', 0, 1),
+	RIGHT('R', 1, 0),
 	DOWN('D', 0, -1);
 
-	static Direction fromChar(char c) {
+	public static Direction fromChar(char c) {
 		for (var direction : values()) {
 			if (direction.c == c) {
 				return direction;
@@ -31,6 +31,18 @@ public enum Direction {
 
 	public int getDeltaY() {
 		return dy;
+	}
+
+	public Direction getLeft() {
+		var values = values();
+		var index = (ordinal() + values.length - 1) % values.length;
+		return values[index];
+	}
+
+	public Direction getRight() {
+		var values = values();
+		var index = (ordinal() + 1) % values.length;
+		return values[index];
 	}
 
 	@Override

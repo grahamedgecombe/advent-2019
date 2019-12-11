@@ -1,5 +1,7 @@
 package com.grahamedgecombe.advent2019.day3;
 
+import com.grahamedgecombe.advent2019.Direction;
+
 public final class Step {
 	public static Step parse(String str) {
 		var direction = Direction.fromChar(str.charAt(0));

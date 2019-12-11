@@ -24,6 +24,10 @@ public final class Position {
 		return new Position(x + dx, y + dy);
 	}
 
+	public Position add(Direction direction) {
+		return add(direction.getDeltaX(), direction.getDeltaY());
+	}
+
 	public int getManhattanDistance(Position other) {
 		return Math.abs(x - other.x) + Math.abs(y - other.y);
 	}

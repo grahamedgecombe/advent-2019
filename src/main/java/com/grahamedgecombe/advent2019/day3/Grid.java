@@ -31,10 +31,9 @@ public final class Grid {
 
 		for (var step : wire.getSteps()) {
 			var direction = step.getDirection();
-			int dx = direction.getDeltaX(), dy = direction.getDeltaY();
 
 			for (int i = 0; i < step.getCount(); i++) {
-				position = position.add(dx, dy);
+				position = position.add(direction);
 
 				var cell = cells.computeIfAbsent(position, p -> new Cell());
 				cell.trace(wire, ++delay);
