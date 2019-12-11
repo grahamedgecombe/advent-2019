@@ -47,7 +47,34 @@ public final class Robot implements IntcodeIo {
 		}
 	}
 
+	public void setColor(Position position, int color) {
+		panels.put(position, color);
+	}
+
 	public int getPaintedPanels() {
 		return panels.size();
+	}
+
+	@Override
+	public String toString() {
+		var xStats = panels.entrySet().stream()
+			.filter(e -> e.getValue() == WHITE)
+			.mapToInt(e -> e.getKey().getX())
+			.summaryStatistics();
+
+		var yStats = panels.entrySet().stream()
+			.filter(e -> e.getValue() == WHITE)
+			.mapToInt(e -> e.getKey().getY())
+			.summaryStatistics();
+
+		var builder = new StringBuilder();
+		for (var y = yStats.getMax(); y >= yStats.getMin(); y--) {
+			for (var x = xStats.getMin(); x <= xStats.getMax(); x++) {
+				var color = panels.getOrDefault(new Position(x, y), BLACK);
+				builder.append(color == WHITE ? '#' : '.');
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
 	}
 }
