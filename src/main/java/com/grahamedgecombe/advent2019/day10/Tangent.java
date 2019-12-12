@@ -2,14 +2,9 @@ package com.grahamedgecombe.advent2019.day10;
 
 import java.util.Objects;
 
-public final class Tangent implements Comparable<Tangent> {
-	private static int gcd(int a, int b) {
-		if (b == 0) {
-			return Math.abs(a);
-		}
-		return gcd(b, a % b);
-	}
+import com.google.common.math.IntMath;
 
+public final class Tangent implements Comparable<Tangent> {
 	private final int opposite, adjacent;
 
 	public Tangent(int opposite, int adjacent) {
@@ -18,7 +13,7 @@ public final class Tangent implements Comparable<Tangent> {
 	}
 
 	public Tangent normalize() {
-		var gcd = gcd(opposite, adjacent);
+		var gcd = IntMath.gcd(Math.abs(opposite), Math.abs(adjacent));
 		return new Tangent(opposite / gcd, adjacent / gcd);
 	}
 
