@@ -12,6 +12,14 @@ public final class Moon {
 		this.velocity = Vector3.ORIGIN;
 	}
 
+	public Vector3 getPosition() {
+		return position;
+	}
+
+	public Vector3 getVelocity() {
+		return velocity;
+	}
+
 	public void gravityTick(Moon other) {
 		int x = Integer.signum(other.position.getX() - position.getX());
 		int y = Integer.signum(other.position.getY() - position.getY());

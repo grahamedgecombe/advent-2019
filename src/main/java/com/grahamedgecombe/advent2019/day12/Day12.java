@@ -19,4 +19,9 @@ public final class Day12 extends Day<Planet> {
 		input.tick(1000);
 		return input.getEnergy();
 	}
+
+	@Override
+	public Object solvePart2(Planet input) {
+		return input.getCycleLength();
+	}
 }
