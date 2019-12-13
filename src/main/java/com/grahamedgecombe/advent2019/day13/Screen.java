@@ -21,11 +21,21 @@ public final class Screen implements IntcodeIo {
 
 	private final Map<Vector2, Integer> tiles = new HashMap<>();
 	private State state = State.READ_X;
-	private int x, y;
+	private int x, y, score;
+
+	private Vector2 getPosition(int tile) {
+		return tiles.entrySet().stream()
+			.filter(e -> e.getValue() == tile)
+			.map(Map.Entry::getKey)
+			.findFirst()
+			.orElseThrow();
+	}
 
 	@Override
 	public long read() {
-		throw new UnsupportedOperationException();
+		var paddlePos = getPosition(TILE_HORIZONTAL_PADDLE);
+		var ballPos = getPosition(TILE_BALL);
+		return Integer.signum(ballPos.getX() - paddlePos.getX());
 	}
 
 	@Override
@@ -40,7 +50,11 @@ public final class Screen implements IntcodeIo {
 			state = State.READ_TILE;
 			break;
 		case READ_TILE:
-			tiles.put(new Vector2(x, y), (int) value);
+			if (x == -1 && y == 0) {
+				score = (int) value;
+			} else {
+				tiles.put(new Vector2(x, y), (int) value);
+			}
 			state = State.READ_X;
 			break;
 		default:
@@ -52,5 +66,9 @@ public final class Screen implements IntcodeIo {
 		return tiles.values().stream()
 			.filter(tile -> tile == TILE_BLOCK)
 			.count();
+	}
+
+	public int getScore() {
+		return score;
 	}
 }

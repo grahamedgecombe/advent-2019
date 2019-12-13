@@ -22,4 +22,13 @@ public final class Day13 extends Day<List<Long>> {
 		machine.evaluate();
 		return screen.countBlockTiles();
 	}
+
+	@Override
+	public Object solvePart2(List<Long> input) {
+		var screen = new Screen();
+		var machine = new IntcodeMachine(input, screen);
+		machine.poke(0, 2);
+		machine.evaluate();
+		return screen.getScore();
+	}
 }
