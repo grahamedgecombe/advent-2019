@@ -2,12 +2,12 @@ package com.grahamedgecombe.advent2019;
 
 import java.util.Objects;
 
-public final class Position {
-	public static final Position ORIGIN = new Position(0, 0);
+public final class Vector2 {
+	public static final Vector2 ORIGIN = new Vector2(0, 0);
 
 	private final int x, y;
 
-	public Position(int x, int y) {
+	public Vector2(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -20,15 +20,15 @@ public final class Position {
 		return y;
 	}
 
-	public Position add(int dx, int dy) {
-		return new Position(x + dx, y + dy);
+	public Vector2 add(int dx, int dy) {
+		return new Vector2(x + dx, y + dy);
 	}
 
-	public Position add(Direction direction) {
+	public Vector2 add(Direction direction) {
 		return add(direction.getDeltaX(), direction.getDeltaY());
 	}
 
-	public int getManhattanDistance(Position other) {
+	public int getManhattanDistance(Vector2 other) {
 		return Math.abs(x - other.x) + Math.abs(y - other.y);
 	}
 
@@ -40,7 +40,7 @@ public final class Position {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		Position position = (Position) o;
+		Vector2 position = (Vector2) o;
 		return x == position.x &&
 			y == position.y;
 	}

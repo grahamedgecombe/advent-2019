@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.grahamedgecombe.advent2019.Advent;
-import com.grahamedgecombe.advent2019.Position;
+import com.grahamedgecombe.advent2019.Vector2;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -88,7 +88,7 @@ public final class Day10Test {
 
 	@Test
 	public void testPart2() throws IOException {
-		assertEquals(Optional.of(new Position(8, 2)), Grid.parse(List.of(
+		assertEquals(Optional.of(new Vector2(8, 2)), Grid.parse(List.of(
 			".#..##.###...#######",
 			"##.############..##.",
 			".#.######.########.#",

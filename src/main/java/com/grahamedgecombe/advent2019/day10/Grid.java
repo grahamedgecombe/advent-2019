@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.grahamedgecombe.advent2019.Position;
+import com.grahamedgecombe.advent2019.Vector2;
 
 public final class Grid {
 	public static Grid parse(List<String> lines) {
@@ -45,8 +45,8 @@ public final class Grid {
 		return asteroids[y * width + x];
 	}
 
-	public SortedMap<Tangent, SortedMap<Integer, Position>> getAsteroids(int x, int y) {
-		var asteroids = new TreeMap<Tangent, SortedMap<Integer, Position>>();
+	public SortedMap<Tangent, SortedMap<Integer, Vector2>> getAsteroids(int x, int y) {
+		var asteroids = new TreeMap<Tangent, SortedMap<Integer, Vector2>>();
 
 		for (var otherY = 0; otherY < height; otherY++) {
 			for (var otherX = 0; otherX < width; otherX++) {
@@ -56,7 +56,7 @@ public final class Grid {
 
 					var angle = new Tangent(opposite, adjacent).normalize();
 					var squaredDistance = opposite * opposite + adjacent * adjacent;
-					asteroids.computeIfAbsent(angle, a -> new TreeMap<>()).put(squaredDistance, new Position(otherX, otherY));
+					asteroids.computeIfAbsent(angle, a -> new TreeMap<>()).put(squaredDistance, new Vector2(otherX, otherY));
 				}
 			}
 		}
@@ -85,7 +85,7 @@ public final class Grid {
 		return getStation().orElseThrow().getVisibleAsteroids();
 	}
 
-	public Optional<Position> vaporizeAsteroids() {
+	public Optional<Vector2> vaporizeAsteroids() {
 		var station = getStation().orElseThrow();
 		var asteroids = getAsteroids(station.getX(), station.getY());
 

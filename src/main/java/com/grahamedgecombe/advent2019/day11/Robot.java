@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.grahamedgecombe.advent2019.Direction;
-import com.grahamedgecombe.advent2019.Position;
+import com.grahamedgecombe.advent2019.Vector2;
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
 public final class Robot implements IntcodeIo {
@@ -18,8 +18,8 @@ public final class Robot implements IntcodeIo {
 		WRITE_DIRECTION
 	}
 
-	private final Map<Position, Integer> panels = new HashMap<>();
-	private Position position = Position.ORIGIN;
+	private final Map<Vector2, Integer> panels = new HashMap<>();
+	private Vector2 position = Vector2.ORIGIN;
 	private Direction direction = Direction.UP;
 	private State state = State.READ_COLOR;
 
@@ -47,7 +47,7 @@ public final class Robot implements IntcodeIo {
 		}
 	}
 
-	public void setColor(Position position, int color) {
+	public void setColor(Vector2 position, int color) {
 		panels.put(position, color);
 	}
 
@@ -70,7 +70,7 @@ public final class Robot implements IntcodeIo {
 		var builder = new StringBuilder();
 		for (var y = yStats.getMax(); y >= yStats.getMin(); y--) {
 			for (var x = xStats.getMin(); x <= xStats.getMax(); x++) {
-				var color = panels.getOrDefault(new Position(x, y), BLACK);
+				var color = panels.getOrDefault(new Vector2(x, y), BLACK);
 				builder.append(color == WHITE ? '#' : '.');
 			}
 			builder.append("\n");

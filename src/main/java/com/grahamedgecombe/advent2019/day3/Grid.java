@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.OptionalInt;
 
 import com.google.common.base.Preconditions;
-import com.grahamedgecombe.advent2019.Position;
+import com.grahamedgecombe.advent2019.Vector2;
 
 public final class Grid {
 	public static Grid trace(List<Wire> wires) {
@@ -19,14 +19,14 @@ public final class Grid {
 		return grid;
 	}
 
-	private final Map<Position, Cell> cells = new HashMap<>();
+	private final Map<Vector2, Cell> cells = new HashMap<>();
 
 	private Grid() {
 		/* empty */
 	}
 
 	private void trace(Wire wire) {
-		var position = Position.ORIGIN;
+		var position = Vector2.ORIGIN;
 		int delay = 0;
 
 		for (var step : wire.getSteps()) {
@@ -45,7 +45,7 @@ public final class Grid {
 		return cells.entrySet().stream()
 			.filter(e -> e.getValue().isIntersection())
 			.map(Map.Entry::getKey)
-			.mapToInt(Position.ORIGIN::getManhattanDistance)
+			.mapToInt(Vector2.ORIGIN::getManhattanDistance)
 			.min();
 	}
 
