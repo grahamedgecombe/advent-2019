@@ -24,14 +24,14 @@ public final class Nanofactory {
 		this.reactions = reactions;
 	}
 
-	private int getRequiredOre(String chemical, int quantity, Map<String, Integer> spares) {
+	private long getRequiredOre(String chemical, long quantity, Map<String, Long> spares) {
 		/* base case */
 		if (chemical.equals("ORE")) {
 			return quantity;
 		}
 
 		/* try to use as much spare chemical as possible */
-		var spareQuantity = spares.getOrDefault(chemical, 0);
+		var spareQuantity = spares.getOrDefault(chemical, 0L);
 		if (spareQuantity == quantity) {
 			spares.remove(chemical);
 			return 0;
@@ -49,7 +49,7 @@ public final class Nanofactory {
 		var n = (quantity + outputQuantity - 1) / outputQuantity; /* number of times to run the reaction rounded up */
 
 		/* sum required ore for each input */
-		var requiredOre = 0;
+		var requiredOre = 0L;
 		for (var input : reaction.getInputs()) {
 			requiredOre += getRequiredOre(input.getName(), input.getQuantity() * n, spares);
 		}
@@ -57,13 +57,43 @@ public final class Nanofactory {
 		/* add spare output chemical */
 		spareQuantity = (outputQuantity * n) - quantity;
 		if (spareQuantity > 0) {
-			spares.merge(chemical, spareQuantity, Integer::sum);
+			spares.merge(chemical, spareQuantity, Long::sum);
 		}
 
 		return requiredOre;
 	}
 
-	public int getRequiredOre() {
-		return getRequiredOre("FUEL", 1, new HashMap<>());
+	private long getRequiredOre(long fuel) {
+		return getRequiredOre("FUEL", fuel, new HashMap<>());
+	}
+
+	public long getRequiredOre() {
+		return getRequiredOre(1);
+	}
+
+	public long getMaximumFuel() {
+		/* go through powers of two until we find an upper/lower bound around 1 trillion ore */
+		long lowerBound = 1, upperBound = 2;
+		while (getRequiredOre(upperBound) < 1000000000000L) {
+			lowerBound = upperBound;
+			upperBound *= 2;
+		}
+
+		/* binary search */
+		return binarySearch(lowerBound, upperBound);
+	}
+
+	private long binarySearch(long lower, long upper) {
+		long middle = (lower + upper) / 2;
+		if (lower == middle) {
+			return lower;
+		}
+
+		long ore = getRequiredOre(middle);
+		if (ore > 1000000000000L) {
+			return binarySearch(lower, middle);
+		} else {
+			return binarySearch(middle, upper);
+		}
 	}
 }

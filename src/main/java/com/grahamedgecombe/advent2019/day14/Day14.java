@@ -18,4 +18,9 @@ public final class Day14 extends Day<Nanofactory> {
 	public Object solvePart1(Nanofactory input) {
 		return input.getRequiredOre();
 	}
+
+	@Override
+	public Object solvePart2(Nanofactory input) {
+		return input.getMaximumFuel();
+	}
 }
