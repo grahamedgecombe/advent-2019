@@ -1,10 +1,10 @@
 package com.grahamedgecombe.advent2019;
 
 public enum Direction {
-	LEFT('L', -1, 0),
-	UP('U', 0, 1),
-	RIGHT('R', 1, 0),
-	DOWN('D', 0, -1);
+	LEFT('L', -1, 0, 3),
+	UP('U', 0, 1, 1),
+	RIGHT('R', 1, 0, 4),
+	DOWN('D', 0, -1, 2);
 
 	public static Direction fromChar(char c) {
 		for (var direction : values()) {
@@ -18,11 +18,13 @@ public enum Direction {
 
 	private final char c;
 	private final int dx, dy;
+	private final int day15Command;
 
-	Direction(char c, int dx, int dy) {
+	Direction(char c, int dx, int dy, int day15Command) {
 		this.c = c;
 		this.dx = dx;
 		this.dy = dy;
+		this.day15Command = day15Command;
 	}
 
 	public int getDeltaX() {
@@ -31,6 +33,10 @@ public enum Direction {
 
 	public int getDeltaY() {
 		return dy;
+	}
+
+	public int getDay15Command() {
+		return day15Command;
 	}
 
 	public Direction getLeft() {

@@ -23,12 +23,14 @@ public final class AmplifierIo implements IntcodeIo {
 	}
 
 	@Override
-	public void write(long value) {
+	public boolean write(long value) {
 		try {
 			output.put(value);
 		} catch (InterruptedException ex) {
 			/* we never call interrupt() */
 			throw new IllegalStateException();
 		}
+
+		return false;
 	}
 }

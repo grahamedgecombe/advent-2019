@@ -39,7 +39,7 @@ public final class Screen implements IntcodeIo {
 	}
 
 	@Override
-	public void write(long value) {
+	public boolean write(long value) {
 		switch (state) {
 		case READ_X:
 			x = (int) value;
@@ -60,6 +60,8 @@ public final class Screen implements IntcodeIo {
 		default:
 			throw new IllegalStateException();
 		}
+
+		return false;
 	}
 
 	public long countBlockTiles() {

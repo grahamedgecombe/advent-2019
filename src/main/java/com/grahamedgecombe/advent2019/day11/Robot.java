@@ -31,7 +31,7 @@ public final class Robot implements IntcodeIo {
 	}
 
 	@Override
-	public void write(long value) {
+	public boolean write(long value) {
 		switch (state) {
 		case WRITE_COLOR:
 			panels.put(position, (int) value);
@@ -45,6 +45,8 @@ public final class Robot implements IntcodeIo {
 		default:
 			throw new IllegalStateException();
 		}
+
+		return false;
 	}
 
 	public void setColor(Vector2 position, int color) {

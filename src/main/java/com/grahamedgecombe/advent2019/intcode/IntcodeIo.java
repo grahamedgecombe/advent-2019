@@ -8,11 +8,11 @@ public interface IntcodeIo {
 		}
 
 		@Override
-		public void write(long value) {
+		public boolean write(long value) {
 			throw new UnsupportedOperationException();
 		}
 	};
 
 	long read();
-	void write(long value);
+	boolean write(long value);
 }

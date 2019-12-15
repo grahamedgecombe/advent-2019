@@ -14,8 +14,9 @@ public final class TestIntcodeIo implements IntcodeIo {
 	}
 
 	@Override
-	public void write(long value) {
+	public boolean write(long value) {
 		output.add(value);
+		return false;
 	}
 
 	public List<Long> getOutput() {

@@ -29,6 +29,13 @@ public final class IntcodeMachine {
 		this.io = io;
 	}
 
+	public IntcodeMachine fork(IntcodeIo io) {
+		var machine = new IntcodeMachine(new ArrayList<>(memory), io);
+		machine.pc = pc;
+		machine.relativeBase = relativeBase;
+		return machine;
+	}
+
 	public void poke(long addr, long value) {
 		while (addr >= memory.size()) {
 			memory.add(0L);
@@ -103,7 +110,10 @@ public final class IntcodeMachine {
 			writeParameter(parameters[0], io.read());
 			break;
 		case OUTPUT:
-			io.write(readParameter(parameters[0]));
+			var suspend = io.write(readParameter(parameters[0]));
+			if (suspend) {
+				return false;
+			}
 			break;
 		case JUMP_IF_TRUE:
 			if (readParameter(parameters[0]) != 0) {

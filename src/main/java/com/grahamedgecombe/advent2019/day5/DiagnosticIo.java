@@ -19,8 +19,9 @@ public final class DiagnosticIo implements IntcodeIo {
 	}
 
 	@Override
-	public void write(long value) {
+	public boolean write(long value) {
 		outputs.add(value);
+		return false;
 	}
 
 	public long getDiagnosticCode() {
