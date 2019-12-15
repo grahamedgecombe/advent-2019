@@ -16,16 +16,18 @@ public final class Day15 extends Day<List<Long>> {
 		private final IntcodeMachine machine;
 		private final Vector2 position;
 		private final boolean oxygen;
+		private final boolean part2;
 
-		public Node(IntcodeMachine machine, Vector2 position, boolean oxygen) {
+		public Node(IntcodeMachine machine, Vector2 position, boolean oxygen, boolean part2) {
 			this.machine = machine;
 			this.position = position;
 			this.oxygen = oxygen;
+			this.part2 = part2;
 		}
 
 		@Override
 		public boolean isGoal() {
-			return oxygen;
+			return oxygen || part2;
 		}
 
 		@Override
@@ -46,7 +48,7 @@ public final class Day15 extends Day<List<Long>> {
 					oxygen = true;
 					/* fall through */
 				case RepairDroidIo.STATUS_CLEAR:
-					neighbours.add(new Node(fork, position.add(direction), oxygen));
+					neighbours.add(new Node(fork, position.add(direction), oxygen, part2));
 					break;
 				default:
 					throw new IllegalStateException();
@@ -83,10 +85,30 @@ public final class Day15 extends Day<List<Long>> {
 		return IntcodeMachine.parseProgram(lines.get(0));
 	}
 
+	private List<Node> getOxygenPath(List<Long> program) {
+		var machine = new IntcodeMachine(program, IntcodeIo.UNSUPPORTED);
+		return Bfs.search(new Node(machine, Vector2.ORIGIN, false, false)).orElseThrow();
+	}
+
 	@Override
 	public Object solvePart1(List<Long> input) {
-		var machine = new IntcodeMachine(input, IntcodeIo.UNSUPPORTED);
-		var path = Bfs.search(new Node(machine, Vector2.ORIGIN, false)).orElseThrow();
+		var path = getOxygenPath(input);
 		return path.size() - 1; /* subtract one to get number of edges */
+	}
+
+	@Override
+	public Object solvePart2(List<Long> input) {
+		/* get position of the oxygen */
+		var path = getOxygenPath(input);
+		var oxygen = path.get(path.size() - 1);
+
+		/* find paths from the oxygen to all tiles */
+		var paths = Bfs.searchAll(new Node(oxygen.machine, oxygen.position, oxygen.oxygen, true));
+
+		/* the longest path determines how long it takes to fill the area with oxygen */
+		return paths.stream()
+			.mapToInt(p -> p.size() - 1)
+			.max()
+			.orElseThrow();
 	}
 }
