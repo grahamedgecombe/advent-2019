@@ -1,6 +1,11 @@
 package com.grahamedgecombe.advent2019.day17;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.grahamedgecombe.advent2019.Direction;
+import com.grahamedgecombe.advent2019.Vector2;
 
 public final class Map {
 	public static final char TILE_SCAFFOLD = '#';
@@ -43,6 +48,10 @@ public final class Map {
 		return tiles[y * width + x];
 	}
 
+	public char getTile(Vector2 pos) {
+		return getTile(pos.getX(), pos.getY());
+	}
+
 	public int getAlignmentParameterSum() {
 		var sum = 0;
 
@@ -66,6 +75,60 @@ public final class Map {
 		}
 
 		return sum;
+	}
+
+	private Vector2 findRobot() {
+		for (var x = 0; x < width; x++) {
+			for (var y = 0; y < height; y++) {
+				var tile = getTile(x, y);
+				if (tile == TILE_ROBOT_UP || tile == TILE_ROBOT_DOWN || tile == TILE_ROBOT_LEFT || tile == TILE_ROBOT_RIGHT) {
+					return new Vector2(x, y);
+				}
+			}
+		}
+
+		throw new IllegalArgumentException();
+	}
+
+	private Optional<Direction> turnToScaffold(List<String> path, Vector2 pos, Direction dir, boolean start) {
+		if (getTile(pos.add(dir)) == Map.TILE_SCAFFOLD) {
+			return Optional.of(dir);
+		} else if (getTile(pos.add(dir.getLeft())) == Map.TILE_SCAFFOLD) {
+			path.add("R");
+			return Optional.of(dir.getLeft());
+		} else if (getTile(pos.add(dir.getRight())) == Map.TILE_SCAFFOLD) {
+			path.add("L");
+			return Optional.of(dir.getRight());
+		} else if (getTile(pos.add(dir.getReverse())) == Map.TILE_SCAFFOLD && start) {
+			path.add("L");
+			path.add("L");
+			return Optional.of(dir.getReverse());
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	private Vector2 move(List<String> path, Vector2 pos, Direction dir) {
+		path.add("1");
+		return pos.add(dir);
+	}
+
+	public List<String> calculatePath() {
+		var path = new ArrayList<String>();
+
+		var pos = findRobot();
+		var dir = Direction.fromDay17Direction(getTile(pos));
+
+		dir = turnToScaffold(path, pos, dir, true).orElseThrow(IllegalArgumentException::new);
+		pos = move(path, pos, dir);
+
+		Optional<Direction> nextDir;
+		while ((nextDir = turnToScaffold(path, pos, dir, false)).isPresent()) {
+			dir = nextDir.get();
+			pos = move(path, pos, dir);
+		}
+
+		return path;
 	}
 
 	@Override

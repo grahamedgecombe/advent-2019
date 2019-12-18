@@ -23,4 +23,28 @@ public final class Day17Test {
 
 		assertEquals(3336, Advent.solvePart1(new Day17()));
 	}
+
+	@Test
+	public void testPart2() throws IOException {
+		var path = CompressedPath.rle(Map.parse(List.of(
+			"#######...#####",
+			"#.....#...#...#",
+			"#.....#...#...#",
+			"......#...#...#",
+			"......#...###.#",
+			"......#.....#.#",
+			"^########...#.#",
+			"......#.#...#.#",
+			"......#########",
+			"........#...#..",
+			"....#########..",
+			"....#...#......",
+			"....#...#......",
+			"....#...#......",
+			"....#####......"
+		)).calculatePath());
+		assertEquals("R,8,R,8,R,4,R,4,R,8,L,6,L,2,R,4,R,4,R,8,R,8,R,8,L,6,L,2", String.join(",", path));
+
+		assertEquals(597517L, Advent.solvePart2(new Day17()));
+	}
 }
