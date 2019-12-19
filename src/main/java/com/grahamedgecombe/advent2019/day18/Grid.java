@@ -1,10 +1,13 @@
 package com.grahamedgecombe.advent2019.day18;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
-import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterators;
 import com.grahamedgecombe.advent2019.Bfs;
 import com.grahamedgecombe.advent2019.Vector2;
 
@@ -31,7 +34,6 @@ public final class Grid {
 
 		var tiles = new char[width * height];
 		var keys = new HashSet<Character>();
-		Vector2 entrance = null;
 
 		for (int y = 0; y < height; y++) {
 			var line = lines.get(y);
@@ -41,27 +43,21 @@ public final class Grid {
 
 				if (isKey(c)) {
 					keys.add(c);
-				} else if (c == TILE_ENTRANCE) {
-					entrance = new Vector2(x, y);
 				}
 			}
 		}
 
-		Preconditions.checkArgument(entrance != null);
-
-		return new Grid(tiles, width, height, keys.size(), entrance);
+		return new Grid(tiles, width, height, keys.size());
 	}
 
 	private final char[] tiles;
 	private final int width, height, keys;
-	private final Vector2 entrance;
 
-	private Grid(char[] tiles, int width, int height, int keys, Vector2 entrance) {
+	private Grid(char[] tiles, int width, int height, int keys) {
 		this.tiles = tiles;
 		this.width = width;
 		this.height = height;
 		this.keys = keys;
-		this.entrance = entrance;
 	}
 
 	public char getTile(int x, int y) {
@@ -80,8 +76,75 @@ public final class Grid {
 		return keys;
 	}
 
+	public ImmutableSet<Vector2> getEntrances() {
+		var builder = ImmutableSet.<Vector2>builder();
+
+		for (int y = 0, index = 0; y < height; y++) {
+			for (var x = 0; x < width; x++, index++) {
+				if (tiles[index] == TILE_ENTRANCE) {
+					builder.add(new Vector2(x, y));
+				}
+			}
+		}
+
+		return builder.build();
+	}
+
+	public Grid split() {
+		var entrance = Iterators.getOnlyElement(getEntrances().iterator());
+
+		var x = entrance.getX();
+		var y = entrance.getY();
+
+		var newTiles = Arrays.copyOf(tiles, tiles.length);
+		for (var dy = -1; dy <= 1; dy++) {
+			for (var dx = -1; dx <= 1; dx++) {
+				var tile = dx == 0 || dy == 0 ? '#' : '@';
+				newTiles[(y + dy) * width + (x + dx)] = tile;
+			}
+		}
+
+		return new Grid(newTiles, width, height, keys);
+	}
+
 	public int getSteps() {
-		var path = Bfs.search(new Node(this, entrance, ImmutableSet.of())).orElseThrow();
+		var positions = ImmutableList.copyOf(getEntrances());
+		var path = Bfs.search(new Node(this, positions, ImmutableSet.of())).orElseThrow();
 		return path.size() - 1;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Grid grid = (Grid) o;
+		return width == grid.width &&
+			height == grid.height &&
+			Arrays.equals(tiles, grid.tiles);
+	}
+
+	@Override
+	public int hashCode() {
+		int result = Objects.hash(width, height);
+		result = 31 * result + Arrays.hashCode(tiles);
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		var builder = new StringBuilder();
+
+		for (int y = 0, index = 0; y < height; y++) {
+			for (var x = 0; x < width; x++, index++) {
+				builder.append(tiles[index]);
+			}
+			builder.append("\n");
+		}
+
+		return builder.toString();
 	}
 }

@@ -56,4 +56,67 @@ public final class Day18Test {
 
 		assertEquals(4844, Advent.solvePart1(new Day18()));
 	}
+
+	@Test
+	public void testPart2() {
+		assertEquals(Grid.parse(List.of(
+			"#######",
+			"#a.#Cd#",
+			"##@#@##",
+			"#######",
+			"##@#@##",
+			"#cB#Ab#",
+			"#######"
+		)), Grid.parse(List.of(
+			"#######",
+			"#a.#Cd#",
+			"##...##",
+			"##.@.##",
+			"##...##",
+			"#cB#Ab#",
+			"#######"
+		)).split());
+
+		assertEquals(8, Grid.parse(List.of(
+			"#######",
+			"#a.#Cd#",
+			"##@#@##",
+			"#######",
+			"##@#@##",
+			"#cB#Ab#",
+			"#######"
+		)).getSteps());
+
+		assertEquals(24, Grid.parse(List.of(
+			"###############",
+			"#d.ABC.#.....a#",
+			"######@#@######",
+			"###############",
+			"######@#@######",
+			"#b.....#.....c#",
+			"###############"
+		)).getSteps());
+
+		assertEquals(32, Grid.parse(List.of(
+			"#############",
+			"#DcBa.#.GhKl#",
+			"#.###@#@#I###",
+			"#e#d#####j#k#",
+			"###C#@#@###J#",
+			"#fEbA.#.FgHi#",
+			"#############"
+		)).getSteps());
+
+		assertEquals(72, Grid.parse(List.of(
+			"#############",
+			"#g#f.D#..h#l#",
+			"#F###e#E###.#",
+			"#dCba@#@BcIJ#",
+			"#############",
+			"#nK.L@#@G...#",
+			"#M###N#H###.#",
+			"#o#m..#i#jk.#",
+			"#############"
+		)).getSteps());
+	}
 }
