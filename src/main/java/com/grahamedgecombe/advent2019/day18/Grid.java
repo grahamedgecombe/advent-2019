@@ -8,7 +8,10 @@ import java.util.Objects;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterators;
+import com.google.common.graph.ValueGraph;
+import com.google.common.graph.ValueGraphBuilder;
 import com.grahamedgecombe.advent2019.Bfs;
+import com.grahamedgecombe.advent2019.Dijkstra;
 import com.grahamedgecombe.advent2019.Vector2;
 
 public final class Grid {
@@ -107,10 +110,43 @@ public final class Grid {
 		return new Grid(newTiles, width, height, keys);
 	}
 
+	private ValueGraph<Vector2, Path> createGraph() {
+		/* directed as we want entrance->key nodes but not key->entrance nodes */
+		var graph = ValueGraphBuilder.directed().<Vector2, Path>build();
+
+		for (int y = 0, index = 0; y < height; y++) {
+			for (var x = 0; x < width; x++, index++) {
+				var tile = tiles[index];
+				if (tile != Grid.TILE_ENTRANCE && !Grid.isKey(tile)) {
+					continue;
+				}
+
+				var from = new Vector2(x, y);
+				for (var path : Bfs.searchAll(new SimpleNode(this, from))) {
+					var to = path.get(path.size() - 1);
+					if (!from.equals(to.getPosition())) {
+						graph.putEdgeValue(from, to.getPosition(), Path.fromSimpleNodes(this, path));
+					}
+				}
+
+			}
+		}
+
+		return graph;
+	}
+
 	public int getSteps() {
+		var graph = createGraph();
 		var positions = ImmutableList.copyOf(getEntrances());
-		var path = Bfs.search(new Node(this, positions, ImmutableSet.of())).orElseThrow();
-		return path.size() - 1;
+		var path = Dijkstra.search(new Node(this, graph, positions, ImmutableSet.of())).orElseThrow();
+
+		var steps = 0;
+		for (var i = 0; i < path.size() - 1; i++) {
+			var from = path.get(i);
+			var to = path.get(i + 1);
+			steps += from.getDistance(to);
+		}
+		return steps;
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public final class Day18Test {
 	}
 
 	@Test
-	public void testPart2() {
+	public void testPart2() throws IOException {
 		assertEquals(Grid.parse(List.of(
 			"#######",
 			"#a.#Cd#",
@@ -118,5 +118,7 @@ public final class Day18Test {
 			"#o#m..#i#jk.#",
 			"#############"
 		)).getSteps());
+
+		assertEquals(1784, Advent.solvePart2(new Day18()));
 	}
 }

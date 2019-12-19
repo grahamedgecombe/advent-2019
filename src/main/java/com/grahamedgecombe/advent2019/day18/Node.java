@@ -5,17 +5,19 @@ import java.util.Objects;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.grahamedgecombe.advent2019.Bfs;
-import com.grahamedgecombe.advent2019.Direction;
+import com.google.common.graph.ValueGraph;
+import com.grahamedgecombe.advent2019.Dijkstra;
 import com.grahamedgecombe.advent2019.Vector2;
 
-public final class Node extends Bfs.Node<Node> {
+public final class Node extends Dijkstra.Node<Node> {
 	private final Grid grid;
+	private final ValueGraph<Vector2, Path> graph;
 	private final ImmutableList<Vector2> positions;
 	private final ImmutableSet<Character> keys;
 
-	public Node(Grid grid, ImmutableList<Vector2> positions, ImmutableSet<Character> keys) {
+	public Node(Grid grid, ValueGraph<Vector2, Path> graph, ImmutableList<Vector2> positions, ImmutableSet<Character> keys) {
 		this.grid = grid;
+		this.graph = graph;
 		this.positions = positions;
 		this.keys = keys;
 	}
@@ -26,32 +28,36 @@ public final class Node extends Bfs.Node<Node> {
 	}
 
 	@Override
+	public int getDistance(Node neighbour) {
+		var steps = 0;
+
+		for (var robot = 0; robot < positions.size(); robot++) {
+			var from = positions.get(robot);
+			var to = neighbour.positions.get(robot);
+			if (!from.equals(to)) {
+				steps += graph.edgeValue(from, to).orElseThrow().getSteps();
+			}
+		}
+
+		return steps;
+	}
+
+	@Override
 	public Iterable<Node> getNeighbours() {
 		var neighbours = new ArrayList<Node>();
 
 		for (var robot = 0; robot < positions.size(); robot++) {
 			var position = positions.get(robot);
 
-			for (var direction : Direction.values()) {
-				var nextPosition = position.add(direction);
-				var nextKeys = keys;
+			for (var nextPosition : graph.successors(position)) {
+				var path = graph.edgeValue(position, nextPosition).orElseThrow();
 
-				var tile = grid.getTile(nextPosition);
-				if (tile == Grid.TILE_WALL) {
+				if (!keys.containsAll(path.getRequiredKeys())) {
 					continue;
-				} else if (Grid.isKey(tile)) {
-					if (!nextKeys.contains(tile)) {
-						nextKeys = ImmutableSet.<Character>builder()
-							.addAll(keys)
-							.add(tile)
-							.build();
-					}
-				} else if (Grid.isDoor(tile)) {
-					if (!keys.contains(Grid.toKey(tile))) {
-						continue;
-					}
-				} else if (tile != Grid.TILE_PASSAGE && tile != Grid.TILE_ENTRANCE) {
-					throw new IllegalStateException();
+				}
+
+				if (keys.containsAll(path.getCollectedKeys())) {
+					continue;
 				}
 
 				var nextPositions = ImmutableList.<Vector2>builder();
@@ -59,7 +65,12 @@ public final class Node extends Bfs.Node<Node> {
 					nextPositions.add(i == robot ? nextPosition : positions.get(i));
 				}
 
-				neighbours.add(new Node(grid, nextPositions.build(), nextKeys));
+				var nextKeys = ImmutableSet.<Character>builder()
+					.addAll(keys)
+					.addAll(path.getCollectedKeys())
+					.build();
+
+				neighbours.add(new Node(grid, graph, nextPositions.build(), nextKeys));
 			}
 		}
 
