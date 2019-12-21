@@ -18,4 +18,9 @@ public final class Day20 extends Day<Grid> {
 	public Object solvePart1(Grid input) {
 		return input.getSteps();
 	}
+
+	@Override
+	public Object solvePart2(Grid input) {
+		return input.getRecursiveSteps();
+	}
 }

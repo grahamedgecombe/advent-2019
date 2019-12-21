@@ -10,15 +10,19 @@ import com.grahamedgecombe.advent2019.Vector2;
 public final class Node extends Bfs.Node<Node> {
 	private final Grid grid;
 	private final Vector2 position;
+	private final int level;
+	private final boolean recursive;
 
-	public Node(Grid grid, Vector2 position) {
+	public Node(Grid grid, Vector2 position, int level, boolean recursive) {
 		this.grid = grid;
 		this.position = position;
+		this.level = level;
+		this.recursive = recursive;
 	}
 
 	@Override
 	public boolean isGoal() {
-		return position.equals(grid.getPosition("ZZ").orElseThrow());
+		return position.equals(grid.getPosition("ZZ").orElseThrow()) && level == 0;
 	}
 
 	@Override
@@ -30,12 +34,24 @@ public final class Node extends Bfs.Node<Node> {
 
 			var tile = grid.getTile(nextPosition);
 			if (tile == '.') {
-				neighbours.add(new Node(grid, nextPosition));
+				neighbours.add(new Node(grid, nextPosition, level, recursive));
 			}
 		}
 
 		grid.getDestination(position).ifPresent(dest -> {
-			neighbours.add(new Node(grid, dest));
+			var nextLevel = level;
+
+			if (recursive) {
+				if (grid.isInner(position)) {
+					nextLevel++;
+				} else {
+					nextLevel--;
+				}
+			}
+
+			if (nextLevel >= 0) {
+				neighbours.add(new Node(grid, dest, nextLevel, recursive));
+			}
 		});
 
 		return neighbours;
@@ -50,11 +66,11 @@ public final class Node extends Bfs.Node<Node> {
 			return false;
 		}
 		Node node = (Node) o;
-		return position.equals(node.position);
+		return position.equals(node.position) && level == node.level;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(position);
+		return Objects.hash(position, level);
 	}
 }

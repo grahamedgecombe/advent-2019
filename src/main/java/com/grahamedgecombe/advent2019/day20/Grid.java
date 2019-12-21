@@ -117,9 +117,21 @@ public final class Grid {
 			.findAny();
 	}
 
-	public int getSteps() {
+	private int getSteps(boolean recursive) {
 		var start = getPosition("AA").orElseThrow();
-		var path = Bfs.search(new Node(this, start)).orElseThrow();
+		var path = Bfs.search(new Node(this, start, 0, recursive)).orElseThrow();
 		return path.size() - 1;
+	}
+
+	public int getSteps() {
+		return getSteps(false);
+	}
+
+	public int getRecursiveSteps() {
+		return getSteps(true);
+	}
+
+	public boolean isInner(Vector2 pos) {
+		return pos.getX() >= 3 && pos.getY() >= 3 && pos.getX() < (width - 3) && pos.getY() < (height - 3);
 	}
 }
