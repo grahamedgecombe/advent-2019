@@ -24,6 +24,10 @@ public final class Vector2 {
 		return new Vector2(x + dx, y + dy);
 	}
 
+	public Vector2 add(Vector2 other) {
+		return add(other.x, other.y);
+	}
+
 	public Vector2 add(Direction direction) {
 		return add(direction.getDeltaX(), direction.getDeltaY());
 	}
