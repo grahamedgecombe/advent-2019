@@ -1,11 +1,8 @@
 package com.grahamedgecombe.advent2019.day21;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.grahamedgecombe.advent2019.Advent;
 import com.grahamedgecombe.advent2019.Day;
-import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 
 public final class Day21 extends Day<List<Long>> {
@@ -47,11 +44,29 @@ public final class Day21 extends Day<List<Long>> {
 
 	@Override
 	public Object solvePart2(List<Long> input) {
-		new IntcodeMachine(input, IntcodeIo.INTERACTIVE).evaluate();
-		return super.solvePart2(input);
-	}
+		var io = new SpringdroidIo(List.of(
+			/* from part 1 */
+			"OR A J",
+			"AND B J",
+			"AND C J",
+			"NOT J J",
+			"AND D J",
 
-	public static void main(String[] args) throws IOException {
-		Advent.solvePart2(new Day21());
+			/*
+			 * After jumping, the springdroid must either be able to step
+			 * forwards one tile to E, or jump another four tiles to H.
+			 *
+			 * Our part 2 program therefore adds an extra AND condition:
+			 *
+			 * J = <part 1> & (E | H)
+			 */
+			"OR E T",  /* T  = E */
+			"OR H T",  /* T |= H */
+			"AND T J", /* J &= T */
+			"RUN"
+		));
+		var machine = new IntcodeMachine(input, io);
+		machine.evaluate();
+		return io.getDamage();
 	}
 }
