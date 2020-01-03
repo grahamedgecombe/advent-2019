@@ -68,4 +68,23 @@ public final class Day24Test {
 
 		assertEquals(18844281, Advent.solvePart1(new Day24()));
 	}
+
+	@Test
+	public void testPart2() throws IOException {
+		var grid = RecursiveGrid.from(Grid.parse(List.of(
+			"....#",
+			"#..#.",
+			"#.?##",
+			"..#..",
+			"#...."
+		)));
+
+		for (int i = 0; i < 10; i++) {
+			grid = grid.next();
+		}
+
+		assertEquals(99, grid.countBugs());
+
+		assertEquals(1872, Advent.solvePart2(new Day24()));
+	}
 }

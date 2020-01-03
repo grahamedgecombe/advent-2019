@@ -27,4 +27,13 @@ public final class Day24 extends Day<Grid> {
 	public Object solvePart1(Grid input) {
 		return getFirstRepeated(input).getBiodiversity();
 	}
+
+	@Override
+	public Object solvePart2(Grid input) {
+		var grid = RecursiveGrid.from(input);
+		for (int i = 0; i < 200; i++) {
+			grid = grid.next();
+		}
+		return grid.countBugs();
+	}
 }

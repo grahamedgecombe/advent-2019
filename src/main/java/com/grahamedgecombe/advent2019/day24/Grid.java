@@ -31,6 +31,18 @@ public final class Grid {
 		this.height = height;
 	}
 
+	public BitSet getTiles() {
+		return (BitSet) tiles.clone();
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public boolean isBug(int x, int y) {
 		if (x < 0 || y < 0 || x >= width || y >= height) {
 			return false;
