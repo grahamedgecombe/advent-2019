@@ -26,4 +26,14 @@ public final class Cut implements Technique {
 
 		return cards;
 	}
+
+	@Override
+	public int getA() {
+		return 1;
+	}
+
+	@Override
+	public int getB() {
+		return -n;
+	}
 }

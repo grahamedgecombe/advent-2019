@@ -35,4 +35,6 @@ public interface Technique {
 	}
 
 	List<Integer> run(List<Integer> cards);
+	int getA();
+	int getB();
 }

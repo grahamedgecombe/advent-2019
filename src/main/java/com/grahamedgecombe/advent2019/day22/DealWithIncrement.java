@@ -25,4 +25,14 @@ public final class DealWithIncrement implements Technique {
 
 		return newCards;
 	}
+
+	@Override
+	public int getA() {
+		return n;
+	}
+
+	@Override
+	public int getB() {
+		return 0;
+	}
 }
