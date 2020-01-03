@@ -55,7 +55,7 @@ public final class Network {
 	public synchronized Packet pop(int address) {
 		reading[address] = true;
 
-		if (nat && isIdle() && address == 0) {
+		if (nat && isIdle() && address == 0 && lastNatPacket != null) {
 			lastDeliveredNatY.ifPresent(y -> {
 				if (y == lastNatPacket.getY()) {
 					result = OptionalLong.of(y);
