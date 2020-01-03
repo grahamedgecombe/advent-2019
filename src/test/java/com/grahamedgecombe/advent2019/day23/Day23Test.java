@@ -12,4 +12,9 @@ public final class Day23Test {
 	public void testPart1() throws IOException {
 		assertEquals(24954L, Advent.solvePart1(new Day23()));
 	}
+
+	@Test
+	public void testPart2() throws IOException {
+		assertEquals(17091L, Advent.solvePart2(new Day23()));
+	}
 }

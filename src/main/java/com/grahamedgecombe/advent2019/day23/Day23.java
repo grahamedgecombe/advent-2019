@@ -17,7 +17,13 @@ public final class Day23 extends Day<List<Long>> {
 
 	@Override
 	public Object solvePart1(List<Long> input) {
-		var network = new Network(50);
+		var network = new Network(50, false);
+		return network.evaluate(input);
+	}
+
+	@Override
+	public Object solvePart2(List<Long> input) {
+		var network = new Network(50, true);
 		return network.evaluate(input);
 	}
 }

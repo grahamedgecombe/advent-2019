@@ -1,9 +1,9 @@
 package com.grahamedgecombe.advent2019.day23;
 
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.OptionalLong;
 import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeMachine;
 
@@ -12,30 +12,71 @@ public final class Network {
 		@SuppressWarnings("unchecked")
 		var queues = (Queue<Packet>[]) new Queue[size];
 		for (int i = 0; i < queues.length; i++) {
-			queues[i] = new ConcurrentLinkedQueue<>();
+			queues[i] = new ArrayDeque<>();
 		}
 		return queues;
 	}
 
 	private final Queue<Packet>[] queues;
+	private final boolean[] reading;
+	private final boolean nat;
+	private Packet lastNatPacket;
+	private OptionalLong lastDeliveredNatY = OptionalLong.empty();
 	private OptionalLong result = OptionalLong.empty();
 
-	public Network(int size) {
+	public Network(int size, boolean nat) {
 		this.queues = createQueues(size);
+		this.reading = new boolean[size];
+		this.nat = nat;
 	}
 
-	public boolean isDone() {
+	public synchronized boolean isDone() {
 		return result.isPresent();
 	}
 
-	public Packet pop(int address) {
+	private boolean isIdle() {
+		// all computers must have empty queues
+		for (var queue : queues) {
+			if (!queue.isEmpty()) {
+				return false;
+			}
+		}
+
+		// all computers must be attempting to read
+		for (var r : reading) {
+			if (!r) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public synchronized Packet pop(int address) {
+		reading[address] = true;
+
+		if (nat && isIdle() && address == 0) {
+			lastDeliveredNatY.ifPresent(y -> {
+				if (y == lastNatPacket.getY()) {
+					result = OptionalLong.of(y);
+				}
+			});
+			lastDeliveredNatY = OptionalLong.of(lastNatPacket.getY());
+			return lastNatPacket;
+		}
+
 		return queues[address].poll();
 	}
 
-	public void push(int address, Packet packet) {
+	public synchronized void push(int address, Packet packet) {
 		if (address == 255) {
-			result = OptionalLong.of(packet.getY());
+			if (nat) {
+				lastNatPacket = packet;
+			} else {
+				result = OptionalLong.of(packet.getY());
+			}
 		} else {
+			reading[address] = false;
 			queues[address].add(packet);
 		}
 	}
