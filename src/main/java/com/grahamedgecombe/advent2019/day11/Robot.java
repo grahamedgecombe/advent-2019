@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day11;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalLong;
 
 import com.google.common.base.Preconditions;
 import com.grahamedgecombe.advent2019.Direction;
@@ -24,10 +25,10 @@ public final class Robot implements IntcodeIo {
 	private State state = State.READ_COLOR;
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		Preconditions.checkState(state == State.READ_COLOR);
 		state = State.WRITE_COLOR;
-		return panels.getOrDefault(position, BLACK);
+		return OptionalLong.of(panels.getOrDefault(position, BLACK));
 	}
 
 	@Override

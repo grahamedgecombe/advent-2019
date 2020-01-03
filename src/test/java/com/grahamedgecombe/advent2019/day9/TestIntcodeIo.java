@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day9;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
@@ -9,7 +10,7 @@ public final class TestIntcodeIo implements IntcodeIo {
 	private final List<Long> output = new ArrayList<>();
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		throw new UnsupportedOperationException();
 	}
 

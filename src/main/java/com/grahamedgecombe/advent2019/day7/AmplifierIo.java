@@ -1,5 +1,6 @@
 package com.grahamedgecombe.advent2019.day7;
 
+import java.util.OptionalLong;
 import java.util.concurrent.BlockingQueue;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
@@ -13,9 +14,9 @@ public final class AmplifierIo implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		try {
-			return input.take();
+			return OptionalLong.of(input.take());
 		} catch (InterruptedException ex) {
 			/* we never call interrupt() */
 			throw new IllegalStateException();

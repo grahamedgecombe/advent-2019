@@ -1,6 +1,7 @@
 package com.grahamedgecombe.advent2019.day21;
 
 import java.util.List;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
@@ -14,8 +15,8 @@ public final class SpringdroidIo implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
-		return input.charAt(pos++);
+	public OptionalLong read() {
+		return OptionalLong.of(input.charAt(pos++));
 	}
 
 	@Override

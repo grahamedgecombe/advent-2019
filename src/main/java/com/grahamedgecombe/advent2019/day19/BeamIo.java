@@ -1,5 +1,7 @@
 package com.grahamedgecombe.advent2019.day19;
 
+import java.util.OptionalLong;
+
 import com.google.common.base.Preconditions;
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
@@ -21,14 +23,14 @@ public final class BeamIo implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		switch (state) {
 		case READ_X:
 			state = State.READ_Y;
-			return x;
+			return OptionalLong.of(x);
 		case READ_Y:
 			state = State.WRITE;
-			return y;
+			return OptionalLong.of(y);
 		default:
 			throw new IllegalStateException();
 		}

@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day13;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.Vector2;
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
@@ -32,10 +33,10 @@ public final class Screen implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		var paddlePos = getPosition(TILE_HORIZONTAL_PADDLE);
 		var ballPos = getPosition(TILE_BALL);
-		return Integer.signum(ballPos.getX() - paddlePos.getX());
+		return OptionalLong.of(Integer.signum(ballPos.getX() - paddlePos.getX()));
 	}
 
 	@Override

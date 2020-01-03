@@ -107,7 +107,11 @@ public final class IntcodeMachine {
 			writeParameter(parameters[2], result);
 			break;
 		case INPUT:
-			writeParameter(parameters[0], io.read());
+			var value = io.read();
+			if (value.isEmpty()) {
+				return false;
+			}
+			writeParameter(parameters[0], value.getAsLong());
 			break;
 		case OUTPUT:
 			var suspend = io.write(readParameter(parameters[0]));

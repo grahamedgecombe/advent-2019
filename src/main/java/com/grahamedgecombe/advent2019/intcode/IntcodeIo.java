@@ -2,11 +2,12 @@ package com.grahamedgecombe.advent2019.intcode;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.OptionalLong;
 
 public interface IntcodeIo {
 	IntcodeIo UNSUPPORTED = new IntcodeIo() {
 		@Override
-		public long read() {
+		public OptionalLong read() {
 			throw new UnsupportedOperationException();
 		}
 
@@ -18,9 +19,9 @@ public interface IntcodeIo {
 
 	IntcodeIo INTERACTIVE = new IntcodeIo() {
 		@Override
-		public long read() {
+		public OptionalLong read() {
 			try {
-				return System.in.read();
+				return OptionalLong.of(System.in.read());
 			} catch (IOException ex) {
 				throw new UncheckedIOException(ex);
 			}
@@ -33,6 +34,6 @@ public interface IntcodeIo {
 		}
 	};
 
-	long read();
+	OptionalLong read();
 	boolean write(long value);
 }

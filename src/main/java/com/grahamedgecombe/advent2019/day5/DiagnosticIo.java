@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day5;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
@@ -14,8 +15,8 @@ public final class DiagnosticIo implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
-		return system;
+	public OptionalLong read() {
+		return OptionalLong.of(system);
 	}
 
 	@Override

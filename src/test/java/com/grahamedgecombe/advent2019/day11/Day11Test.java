@@ -1,6 +1,7 @@
 package com.grahamedgecombe.advent2019.day11;
 
 import java.io.IOException;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.Advent;
 import org.junit.jupiter.api.Test;
@@ -12,31 +13,31 @@ public final class Day11Test {
 	public void testPart1() throws IOException {
 		var robot = new Robot();
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(1);
 		robot.write(0);
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(0);
 		robot.write(0);
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(1);
 		robot.write(0);
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(1);
 		robot.write(0);
 
-		assertEquals(1, robot.read());
+		assertEquals(OptionalLong.of(1), robot.read());
 		robot.write(0);
 		robot.write(1);
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(1);
 		robot.write(0);
 
-		assertEquals(0, robot.read());
+		assertEquals(OptionalLong.of(0), robot.read());
 		robot.write(1);
 		robot.write(0);
 

@@ -2,6 +2,7 @@ package com.grahamedgecombe.advent2019.day17;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalLong;
 
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
@@ -10,7 +11,7 @@ public final class CameraIo implements IntcodeIo {
 	private final StringBuilder builder = new StringBuilder();
 
 	@Override
-	public long read() {
+	public OptionalLong read() {
 		throw new IllegalStateException();
 	}
 

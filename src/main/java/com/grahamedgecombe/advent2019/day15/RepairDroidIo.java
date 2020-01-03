@@ -1,5 +1,7 @@
 package com.grahamedgecombe.advent2019.day15;
 
+import java.util.OptionalLong;
+
 import com.grahamedgecombe.advent2019.intcode.IntcodeIo;
 
 public final class RepairDroidIo implements IntcodeIo {
@@ -19,8 +21,8 @@ public final class RepairDroidIo implements IntcodeIo {
 	}
 
 	@Override
-	public long read() {
-		return direction;
+	public OptionalLong read() {
+		return OptionalLong.of(direction);
 	}
 
 	@Override
